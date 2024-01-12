@@ -4,17 +4,14 @@ import java.sql.SQLException;
 
 public class Bd {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/Compra_Ventas?useUnicode=true&characterEncoding=UTF-8";
-    private static final String USUARIO = "root";
-    private static final String CONTRASENA = "administrador";
-
-    public static Connection obtenerConexion() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            return DriverManager.getConnection(URL, USUARIO, CONTRASENA);
-        } catch (ClassNotFoundException | SQLException e) {
+    public boolean probarConexion(String usuario, String contrasena) {
+        try (Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/Compra_Ventas", usuario,
+                contrasena)) {
+            // La conexión se realiza con las credenciales proporcionadas por el usuario
+            return true; // Si la conexión tiene éxito, las credenciales son válidas
+        } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Error al establecer la conexión con la base de datos");
+            return false; // Si hay una excepción, las credenciales no son válidas
         }
     }
 }

@@ -7,7 +7,7 @@ public class Interfaz extends JFrame {
 
     private JTextField usuarioField;
     private JPasswordField passwordField;
-    private ConexionBD conexionBD; // Cambio de Bd a ConexionBD
+    private Bd bd;
 
     public Interfaz() {
         setTitle("Inicio de Sesión");
@@ -15,7 +15,7 @@ public class Interfaz extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        conexionBD = new ConexionBD(); // Cambio de Bd a ConexionBD
+        bd = new Bd();
 
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
@@ -65,11 +65,16 @@ public class Interfaz extends JFrame {
                 String usuario = usuarioField.getText();
                 String contrasena = new String(passwordField.getPassword());
 
-                if (conexionBD.probarConexion(usuario, contrasena)) { // Cambio de bd.probarConexion a conexionBD.probarConexion
+                if (bd.probarConexion(usuario, contrasena)) {
                     System.out.println("Inicio de sesión exitoso para " + usuario);
-                    // Iniciar la ventana Proceso con el usuario actual
-                    Proceso proceso = new Proceso(usuario);
+
+                    Proceso proceso = new Proceso(usuario, contrasena, bd);
                     proceso.mostrarVentana();
+
+                    // Pasa las credenciales a la ventana Querys
+                    Querys querys = new Querys(usuario, contrasena, bd);
+                    querys.setVisible(true);
+
                     // Cerrar la ventana de inicio de sesión
                     dispose();
                 } else {
@@ -94,4 +99,3 @@ public class Interfaz extends JFrame {
         });
     }
 }
-
